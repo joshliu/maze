@@ -53,10 +53,15 @@ func NewMaze(x int, y int) *Maze {
 	return m
 }
 
-func Generate(maze Maze) Maze {
+func Generate(maze Maze, s int64) Maze {
 	visited := *new([][]int)
 	cellStack := *new([][]int)
-	startingCoords := []int{rand.Intn(maze.xSize), rand.Intn(maze.ySize)}
+
+	s1 := rand.NewSource(s)
+  r := rand.New(s1)
+
+	startingCoords := []int{r.Intn(maze.xSize), r.Intn(maze.ySize)}
+
 
 	visited = append(visited, startingCoords)
 	cellStack = append(cellStack, startingCoords)
@@ -65,7 +70,7 @@ func Generate(maze Maze) Maze {
 		//index out of range
 		choices := getNeighbors(cellStack[len(cellStack)-1], visited, maze)
 		if len(choices) > 0 {
-			choice := choices[rand.Intn(len(choices))]
+			choice := choices[r.Intn(len(choices))]
 			cell1 := maze.maze[cellStack[len(cellStack)-1][1]][cellStack[len(cellStack)-1][0]]
 			cell2 := maze.maze[choice[1]][choice[0]]
 
